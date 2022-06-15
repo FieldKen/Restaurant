@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Restaurant.Database;
+using Restaurant.Domain;
 using Restaurant.Models;
 
 namespace Restaurant.Controllers
@@ -23,6 +24,31 @@ namespace Restaurant.Controllers
             });
 
             return View(vm);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromForm] MealCreateViewModel vm)
+        {
+            if (TryValidateModel(vm))
+            {
+                var meal = new Meal
+                {
+                    Description = vm.Description,
+                    Name = vm.Name,
+                    Price = vm.Price
+                };
+
+                restaurantDatabase.Insert(meal);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
         }
     }
 }
