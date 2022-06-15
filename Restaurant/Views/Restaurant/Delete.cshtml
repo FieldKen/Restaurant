@@ -1,0 +1,9 @@
+﻿@model MealDeleteViewModel
+
+<p>Bent u zeker dat u <strong>@Model.Name</strong> wilt verwijderen?</p>
+
+<form asp-controller="Restaurant" asp-action="ConfirmDelete" asp-route-id="@Model.Id" method="post">
+	<button class="btn btn-danger" type="submit">Delete</button>
+</form>
+
+<a asp-controller="Restaurant" asp-action="Index">Terug naar overzicht</a>

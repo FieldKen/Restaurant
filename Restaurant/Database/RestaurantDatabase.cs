@@ -42,7 +42,7 @@ namespace Restaurant.Database
 
         public Meal Insert(Meal meal)
         {
-            meal.Id = counter++;
+            meal.Id = ++counter;
             meals.Add(meal);
             return meal;
         }

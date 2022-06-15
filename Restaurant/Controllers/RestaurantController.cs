@@ -50,5 +50,75 @@ namespace Restaurant.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Detail([FromRoute] int id)
+        {
+            var meal = restaurantDatabase.GetMeal(id);
+
+            var vm = new MealDetailViewModel
+            {
+                Description = meal.Description,
+                Name = meal.Name,
+                Price = meal.Price
+            };
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public IActionResult Edit([FromRoute] int id)
+        {
+            var meal = restaurantDatabase.GetMeal(id);
+
+            var vm = new MealEditViewModel
+            {
+                Description = meal.Description,
+                Name = meal.Name,
+                Price = meal.Price
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult Edit([FromRoute] int id, [FromForm] MealEditViewModel vm)
+        {
+            if (TryValidateModel(vm))
+            {
+                var meal = new Meal
+                {
+                    Name = vm.Name,
+                    Description = vm.Description,
+                    Price = vm.Price
+                };
+
+                restaurantDatabase.Update(id, meal);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            var meal = restaurantDatabase.GetMeal(id);
+
+            var vm = new MealDeleteViewModel
+            {
+                Id = meal.Id,
+                Name = meal.Name
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult ConfirmDelete([FromRoute] int id)
+        {
+            restaurantDatabase.Delete(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

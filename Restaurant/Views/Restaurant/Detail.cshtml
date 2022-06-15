@@ -1,0 +1,12 @@
+﻿@model MealDetailViewModel;
+
+<strong><label asp-for="Name"></label></strong>
+<p>@Model.Name</p>
+
+<strong><label asp-for="Price"></label></strong>
+<p>&euro; @Model.Price.ToString("0.00")</p>
+
+<strong><label asp-for="Description"></label></strong>
+<p>@Model.Description</p>
+
+<a asp-controller="Restaurant" asp-action="Index">Return to list</a>
