@@ -1,0 +1,31 @@
+﻿@model IEnumerable<MealListViewModel>;
+
+<style>
+	th {
+		width: 300px;
+	}
+
+	.price::before {
+    content: "€ ";
+}
+</style>
+
+<h1>Meals</h1>
+<h2>New</h2>
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Price</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Name</td>
+				<td class="price">@item.Price.ToString("0.00")</td>
+			</tr>
+		}
+	</tbody>
+</table>
