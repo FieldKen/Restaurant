@@ -1,0 +1,45 @@
+﻿@model SummaryViewModel;
+
+<h1>Meals</h1>
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Price</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.Meals)
+		{
+			<tr>
+				<td>@item.Name</td>
+				<td>@item.Price.ToString("0.00")</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<h1>Business Hours</h1>
+<table>
+	<thead>
+		<tr>
+			<th>Day</th>
+			<th colspan="2">From</th>
+			<th>-</th>
+			<th colspan="2">To</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.BusinessHours)
+		{
+			<tr>
+				<td>@item.Day</td>
+				<td>@item.HourStart.ToString("00"):</td>
+				<td>@item.MinuteStart.ToString("00")</td>
+				<td>-</td>
+				<td>@item.HourEnd.ToString("00"):</td>
+				<td>@item.MinuteEnd.ToString("00")</td>
+			</tr>
+		}
+	</tbody>
+</table>

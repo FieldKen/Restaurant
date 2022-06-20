@@ -6,10 +6,11 @@ namespace Restaurant.Database
     {
         private int counter = 0;
         private List<Meal> meals;
-
+        private List<BusinessHour> businessHours;
         public RestaurantDatabase()
         {
             meals = new List<Meal>();
+            businessHours = new List<BusinessHour>();
 
             Insert(new Meal
             {
@@ -38,11 +39,23 @@ namespace Restaurant.Database
                 Description = "Keuze uit tomaten-, groente- of champignonsoep",
                 Price = 8.20
             });
+
+            businessHours.Add(new BusinessHour(DayOfWeek.Monday, 17, 00, 22, 00));
+            businessHours.Add(new BusinessHour(DayOfWeek.Tuesday, 17, 00, 22, 00));
+            businessHours.Add(new BusinessHour(DayOfWeek.Thursday, 17, 00, 22, 00));
+            businessHours.Add(new BusinessHour(DayOfWeek.Friday, 17, 00, 23, 00));
+            businessHours.Add(new BusinessHour(DayOfWeek.Saturday, 11, 00, 23, 00));
+            businessHours.Add(new BusinessHour(DayOfWeek.Sunday, 11, 00, 22, 00));
+        }
+
+        public IEnumerable<BusinessHour> GetBusinessHours()
+        {
+            return businessHours;
         }
 
         public Meal Insert(Meal meal)
         {
-            meal.Id = counter++;
+            meal.Id = ++counter;
             meals.Add(meal);
             return meal;
         }
