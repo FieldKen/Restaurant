@@ -14,6 +14,33 @@ namespace Restaurant.Controllers
             this.restaurantDatabase = restaurantDatabase;
         }
 
+        public IActionResult Summary()
+        {
+            var meals = restaurantDatabase.GetMeals().Select(x => new MealListViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Price = x.Price
+            });
+
+            var businessHours = restaurantDatabase.GetBusinessHours().Select(x => new BusinessHourListViewModel
+            {
+                Day = x.Day,
+                HourStart = x.HourStart,
+                MinuteStart = x.MinuteStart,
+                HourEnd = x.HourEnd,
+                MinuteEnd = x.MinuteEnd
+            });
+
+            var vm = new SummaryViewModel
+            {
+                Meals = meals,
+                BusinessHours = businessHours
+            };
+
+            return View(vm);
+        }
+
         public IActionResult Index()
         {
             var vm = restaurantDatabase.GetMeals().Select(x => new MealListViewModel

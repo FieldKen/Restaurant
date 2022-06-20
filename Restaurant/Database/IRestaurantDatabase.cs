@@ -7,6 +7,7 @@ namespace Restaurant.Database
         Meal Insert(Meal movie);
         Meal GetMeal(int id);
         IEnumerable<Meal> GetMeals();
+        IEnumerable<BusinessHour> GetBusinessHours();
         void Update(int id, Meal movie);
         void Delete(int id);
     }
