@@ -3,16 +3,17 @@ using Restaurant.Database;
 using Restaurant.Domain;
 using Restaurant.Models;
 
-//.
 namespace Restaurant.Controllers
 {
     public class RestaurantController : Controller
     {
         private IRestaurantDatabase restaurantDatabase;
+        private IWebHostEnvironment webHostEnvironment;
 
-        public RestaurantController(IRestaurantDatabase restaurantDatabase)
+        public RestaurantController(IRestaurantDatabase restaurantDatabase, IWebHostEnvironment webHostEnvironment)
         {
             this.restaurantDatabase = restaurantDatabase;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Summary()
@@ -72,6 +73,12 @@ namespace Restaurant.Controllers
                     Price = vm.Price
                 };
 
+                if (vm.Photo != null)
+                {
+                    string uniqueFileName = UploadPhoto(vm.Photo);
+                    meal.PhotoUrl = Path.Combine("/photos", uniqueFileName);
+                }
+
                 restaurantDatabase.Insert(meal);
                 return RedirectToAction(nameof(Index));
             }
@@ -88,7 +95,8 @@ namespace Restaurant.Controllers
             {
                 Description = meal.Description,
                 Name = meal.Name,
-                Price = meal.Price
+                Price = meal.Price,
+                PhotoUrl = meal.PhotoUrl
             };
 
             return View(vm);
@@ -98,12 +106,12 @@ namespace Restaurant.Controllers
         public IActionResult Edit([FromRoute] int id)
         {
             var meal = restaurantDatabase.GetMeal(id);
-
             var vm = new MealEditViewModel
             {
                 Description = meal.Description,
                 Name = meal.Name,
-                Price = meal.Price
+                Price = meal.Price,
+                PhotoUrl = meal.PhotoUrl
             };
 
             return View(vm);
@@ -121,7 +129,25 @@ namespace Restaurant.Controllers
                     Price = vm.Price
                 };
 
-                restaurantDatabase.Update(id, meal);
+                var mealFromDb = restaurantDatabase.GetMeal(id);
+
+                if (vm.Photo != null)
+                {
+                    if (!string.IsNullOrEmpty(mealFromDb.PhotoUrl))
+                    {
+                        DeletePhoto(mealFromDb.PhotoUrl);
+                    }
+
+                    string uniqueFileName = UploadPhoto(vm.Photo);
+                    meal.PhotoUrl = Path.Combine("/photos", uniqueFileName);
+                }
+                else
+                {
+                    meal.PhotoUrl = mealFromDb.PhotoUrl;
+                }
+
+
+                    restaurantDatabase.Update(id, meal);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -147,6 +173,31 @@ namespace Restaurant.Controllers
         {
             restaurantDatabase.Delete(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        private string UploadPhoto(IFormFile photo)
+        {
+            //uniqueFileName = 0123456789.jpg
+            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
+
+            //pathName = www.mijncoolewebsite.be/photos/
+            string pathName = Path.Combine(webHostEnvironment.WebRootPath, "photos");
+
+            //fileNameWithPath = www.mijncoolewebsite.be/photos/0123456789.jpg
+            string fileNameWithPath = Path.Combine(pathName, uniqueFileName);
+
+            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+            {
+                photo.CopyTo(stream);
+            }
+
+            return uniqueFileName;
+        }
+
+        private void DeletePhoto(string photoUrl)
+        {
+            string path = Path.Combine(webHostEnvironment.WebRootPath, photoUrl.Substring(1));
+            System.IO.File.Delete(path);
         }
     }
 }

@@ -1,5 +1,11 @@
 ﻿@model MealDetailViewModel;
 
+<style>
+	img {
+		max-width:300px;
+	}
+</style>
+
 <strong><label asp-for="Name"></label></strong>
 <p>@Model.Name</p>
 
@@ -8,5 +14,8 @@
 
 <strong><label asp-for="Description"></label></strong>
 <p>@Model.Description</p>
+
+<strong><label asp-for="PhotoUrl"></label></strong>
+<p><img src="@Model.PhotoUrl" /></p>
 
 <a asp-controller="Restaurant" asp-action="Index">Return to list</a>

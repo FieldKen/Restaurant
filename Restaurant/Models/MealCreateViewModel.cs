@@ -8,11 +8,16 @@ namespace Restaurant.Models
         [Required]
         [DisplayName("Naam")]
         public string Name { get; set; }
+
         [Required]
         [DisplayName("Prijs")]
         public double Price { get; set; }
+
         [MaxLength(100)]
         [DisplayName("Beschrijving")]
         public string Description { get; set; }
+
+        [DisplayName("Foto")]
+        public IFormFile Photo { get; set; }
     }
 }

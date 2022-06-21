@@ -14,5 +14,10 @@ namespace Restaurant.Models
         [MaxLength(100)]
         [DisplayName("Beschrijving")]
         public string Description { get; set; }
+
+        [DisplayName("Foto")]
+        public IFormFile Photo { get; set; }
+
+        public string? PhotoUrl { get; set; }
     }
 }

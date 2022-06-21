@@ -78,6 +78,7 @@ namespace Restaurant.Database
                 meal.Price = updatedMeal.Price;
                 meal.Name = updatedMeal.Name;
                 meal.Description = updatedMeal.Description;
+                meal.PhotoUrl = updatedMeal.PhotoUrl;
             }
         }
 
