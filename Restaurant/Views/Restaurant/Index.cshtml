@@ -7,6 +7,12 @@
 
 	.price::before {
     content: "€ ";
+	}
+
+	img {
+		height:100px;
+		width:100px;
+	}
 }
 </style>
 
@@ -16,6 +22,7 @@
 <table>
 	<thead>
 		<tr>
+			<th>Picture</th>
 			<th>Name</th>
 			<th>Price</th>
 			<th>Detail</th>
@@ -27,6 +34,11 @@
 		@foreach (var item in Model)
 		{
 			<tr>
+				<td>
+					<a asp-controller="Restaurant" asp-action="Detail" asp-route-id="@item.Id">
+						<img src="@(item.PhotoUrl == null ? "photos/empty.jpg" : "/photos/" + item.PhotoUrl)"/>
+					</a>
+				</td>
 				<td>@item.Name</td>
 				<td class="price">@item.Price.ToString("0.00")</td>
 				<td><a asp-controller="Restaurant" asp-action="Detail" asp-route-id="@item.Id">View meal</a></td>

@@ -8,10 +8,12 @@ namespace Restaurant.Controllers
     public class RestaurantController : Controller
     {
         private IRestaurantDatabase restaurantDatabase;
+        private IWebHostEnvironment webHostEnvironment;
 
-        public RestaurantController(IRestaurantDatabase restaurantDatabase)
+        public RestaurantController(IRestaurantDatabase restaurantDatabase, IWebHostEnvironment webHostEnvironment)
         {
             this.restaurantDatabase = restaurantDatabase;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Summary()
@@ -47,7 +49,8 @@ namespace Restaurant.Controllers
             {
                 Id = x.Id,
                 Name = x.Name,
-                Price = x.Price
+                Price = x.Price,
+                PhotoUrl = x.PhotoUrl
             });
 
             return View(vm);
@@ -56,7 +59,7 @@ namespace Restaurant.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return View(new MealCreateViewModel());
         }
 
         [HttpPost]
@@ -70,6 +73,11 @@ namespace Restaurant.Controllers
                     Name = vm.Name,
                     Price = vm.Price
                 };
+
+                if (vm.Photo != null)
+                {
+                    meal.PhotoUrl = UploadPhoto(vm.Photo);
+                }
 
                 restaurantDatabase.Insert(meal);
                 return RedirectToAction(nameof(Index));
@@ -146,6 +154,20 @@ namespace Restaurant.Controllers
         {
             restaurantDatabase.Delete(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        private string UploadPhoto(IFormFile photo)
+        {
+            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
+            string pathName = Path.Combine(webHostEnvironment.WebRootPath, "photos");
+            string fileNameWithPath = Path.Combine(pathName, uniqueFileName);
+
+            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+            {
+                photo.CopyTo(stream);
+            }
+
+            return uniqueFileName;
         }
     }
 }
