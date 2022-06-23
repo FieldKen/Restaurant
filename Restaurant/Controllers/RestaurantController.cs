@@ -50,7 +50,8 @@ namespace Restaurant.Controllers
                 Id = x.Id,
                 Name = x.Name,
                 Price = x.Price,
-                PhotoUrl = x.PhotoUrl
+                PhotoUrl = x.PhotoUrl,
+                MealType = x.MealType
             });
 
             return View(vm);
@@ -71,7 +72,8 @@ namespace Restaurant.Controllers
                 {
                     Description = vm.Description,
                     Name = vm.Name,
-                    Price = vm.Price
+                    Price = vm.Price,
+                    MealType = vm.MealType
                 };
 
                 if (vm.Photo != null)

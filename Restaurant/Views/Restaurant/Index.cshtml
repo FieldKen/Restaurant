@@ -25,6 +25,7 @@
 			<th>Picture</th>
 			<th>Name</th>
 			<th>Price</th>
+			<th>Type</th>
 			<th>Detail</th>
 			<th>Edit</th>
 			<th>Delete</th>
@@ -41,6 +42,7 @@
 				</td>
 				<td>@item.Name</td>
 				<td class="price">@item.Price.ToString("0.00")</td>
+				<td>@item.MealType</td>
 				<td><a asp-controller="Restaurant" asp-action="Detail" asp-route-id="@item.Id">View meal</a></td>
 				<td><a asp-controller="Restaurant" asp-action="Edit" asp-route-id="@item.Id">Edit meal</a></td>
 				<td><a asp-controller="Restaurant" asp-action="Delete" asp-route-id="@item.Id">Delete meal</a></td>
